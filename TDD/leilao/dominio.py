@@ -1,4 +1,5 @@
-import sys
+from TDD.leilao.excessoes import LanceInvalido
+
 
 class Usuario:
 
@@ -7,6 +8,9 @@ class Usuario:
         self.__carteira = carteira
 
     def propoe_lance(self, leilao, valor):
+        if not self._valor_eh_valido(valor):
+            raise LanceInvalido('Lance não é válido. Valor do lance superior ao valor da carteira')
+
         lance = Lance(self, valor)
         leilao.propoe(lance)
 
@@ -19,6 +23,9 @@ class Usuario:
     @property
     def carteira(self):
         return self.__carteira
+
+    def _valor_eh_valido(self, valor):
+        return valor <= self.__carteira
 
 
 class Lance:
@@ -33,19 +40,19 @@ class Leilao:
     def __init__(self, descricao):
         self.descricao = descricao
         self.__lances = []
-        self.maior_lance = sys.float_info.min
-        self.menor_lance = sys.float_info.max
+        self.maior_lance = 0.0
+        self.menor_lance = 0.0
 
     def propoe(self, lance: Lance):
         if not self.lances or self.lances[-1].usuario != lance.usuario and lance.valor > self.lances[-1].valor:
-            if lance.valor > self.maior_lance:
-                self.maior_lance = lance.valor
-            if lance.valor < self.menor_lance:
+            if not self.__lances:
                 self.menor_lance = lance.valor
+
+            self.maior_lance = lance.valor
 
             self.__lances.append(lance)
         else:
-            raise ValueError('Erro ao propor lance')
+            raise LanceInvalido('Erro ao propor lance')
 
 
     @property

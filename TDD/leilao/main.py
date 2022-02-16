@@ -1,4 +1,4 @@
-from TDD.leilao.dominio import Usuario, Lance, Leilao, Avaliador
+from TDD.leilao.dominio import Usuario, Lance, Leilao
 
 alexandre = Usuario('Alexandre')
 stanley = Usuario('Stanley')

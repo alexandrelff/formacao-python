@@ -1,6 +1,8 @@
 from unittest import TestCase
 
 from TDD.leilao.dominio import Usuario, Lance, Leilao
+from TDD.leilao.excessoes import LanceInvalido
+
 
 class TestLeilao(TestCase):
 
@@ -26,7 +28,7 @@ class TestLeilao(TestCase):
 
     # não deve ser permitido propor lances em ordem decrescente
     def test_lance_decrescente(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(LanceInvalido):
             self.leilao.propoe(self.lance_do_Stanley)
             self.leilao.propoe(self.lance_do_Alexandre)
 
@@ -71,6 +73,6 @@ class TestLeilao(TestCase):
     # se o último usuário for o mesmo, não deve permitir propor o lance
     def test_lances_mesmo_usuario(self):
         lance2_do_Alexandre = Lance(self.alexandre, 200.0)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(LanceInvalido):
             self.leilao.propoe(self.lance_do_Alexandre)
             self.leilao.propoe(lance2_do_Alexandre)
